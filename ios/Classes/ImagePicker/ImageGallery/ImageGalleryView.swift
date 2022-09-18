@@ -17,6 +17,7 @@ protocol ImageGalleryPanGestureDelegate: class {
   func panGestureDidStart()
   func panGestureDidChange(_ translation: CGPoint)
   func panGestureDidEnd(_ translation: CGPoint, velocity: CGPoint)
+  func itemTapped()
 }
 
 open class ImageGalleryView: UIView {
@@ -86,7 +87,6 @@ open class ImageGalleryView: UIView {
   var shouldTransform = false
   var imagesBeforeLoading = 0
   var fetchResult: PHFetchResult<AnyObject>?
-  var imageLimit = 0
 
   // MARK: - Initializers
 
@@ -242,13 +242,15 @@ extension ImageGalleryView: UICollectionViewDelegate {
             cell.selectedImageView.image = nil
         })
         self.selectedStack.dropAsset(asset)
-      } else if self.imageLimit == 0 || self.imageLimit > self.selectedStack.assets.count {
+        self.delegate?.itemTapped();
+      } else if self.configurations.maxImages == 0 || self.configurations.maxImages > self.selectedStack.assets.count {
         cell.selectedImageView.image = AssetManager.getImage("selectedImageGallery")
         cell.selectedImageView.transform = CGAffineTransform(scaleX: 0, y: 0)
         UIView.animate(withDuration: 0.2, animations: {
           cell.selectedImageView.transform = CGAffineTransform.identity
         })
         self.selectedStack.pushAsset(asset)
+        self.delegate?.itemTapped();
       }
     }
   }

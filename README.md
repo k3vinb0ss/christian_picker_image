@@ -2,6 +2,13 @@
 
 Flutter plugin that allows you to upload multi image picker on iOS & Android.
 
+## What changes (iOS) ?
+
+Current UX for picking images is kind of confusing.
+
+ - [x] [Single mode] "Take screenshot" button change to remove current selection button.
+ - [x] BottomView (with number of images has been selected), now updated when selecting images from GalleryView in first time.
+
 ## Getting Started
 
 ChristianImagePicker is an all-in-one camera solution for your iOS app. It lets your users select images from the library and take pictures at the same time. As a developer you get notified of all the user interactions and get the beautiful UI for free, out of the box, it's just that simple.

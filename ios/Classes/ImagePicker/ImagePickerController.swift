@@ -23,9 +23,8 @@ open class ImagePickerController: UIViewController {
     let galleryView = ImageGalleryView(configurations: self.configurations)
     galleryView.delegate = self
     galleryView.selectedStack = self.stack
+      galleryView.selectedStack.maxCount = self.configurations.maxImages
     galleryView.collectionView.layer.anchorPoint = CGPoint(x: 0, y: 0)
-    galleryView.imageLimit = self.imageLimit
-    galleryView.selectedStack.maxCount = self.imageLimit
     return galleryView
     }()
 
@@ -71,7 +70,6 @@ open class ImagePickerController: UIViewController {
 
   @objc open weak var delegate: ImagePickerDelegate?
   open var stack = ImageStack()
-  open var imageLimit = 0
   open var preferredImageSize: CGSize?
   open var startOnFrontCamera = false
   var totalSize: CGSize { return UIScreen.main.bounds.size }
@@ -341,7 +339,7 @@ open class ImagePickerController: UIViewController {
   }
 
   fileprivate func isBelowImageLimit() -> Bool {
-    return (imageLimit == 0 || imageLimit > galleryView.selectedStack.assets.count)
+      return (self.configurations.maxImages == 0 || self.configurations.maxImages > galleryView.selectedStack.assets.count)
   }
 
   fileprivate func takePicture() {
@@ -367,6 +365,10 @@ open class ImagePickerController: UIViewController {
 extension ImagePickerController: BottomContainerViewDelegate {
 
   func pickerButtonDidPress() {
+      if (self.configurations.maxImages == 1 && stack.assets.count == 1) {
+          resetAssets()
+          return
+      }
     takePicture()
   }
 
@@ -481,6 +483,13 @@ extension ImagePickerController: TopViewDelegate {
 // MARK: - Pan gesture handler
 
 extension ImagePickerController: ImageGalleryPanGestureDelegate {
+    func itemTapped() {
+        if (!self.stack.assets.isEmpty) {
+            bottomContainer.pickerButton.numberLabel.textColor = UIColor.black
+            bottomContainer.pickerButton.numberLabel.sizeToFit()
+        }
+    }
+    
 
   func panGestureDidStart() {
     guard let collectionSize = galleryView.collectionSize else { return }

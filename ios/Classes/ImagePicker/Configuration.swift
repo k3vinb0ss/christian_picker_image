@@ -62,6 +62,8 @@ import UIKit
     view.translatesAutoresizingMaskIntoConstraints = false
     return view
   }()
+    
+  @objc public var maxImages = 0
 
   override public init() {}
 }

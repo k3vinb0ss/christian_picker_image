@@ -87,7 +87,21 @@ class ButtonPicker: UIButton {
 
   @objc func recalculatePhotosCount(_ notification: Notification) {
     guard let sender = notification.object as? ImageStack else { return }
-    numberLabel.text = sender.assets.isEmpty ? "" : String(sender.assets.count)
+      print("imageLimit: \(self.configurations.maxImages), assets: \(sender.assets.count)")
+    
+      if (self.configurations.maxImages == 1) {
+          if (sender.assets.count == 1) {
+              numberLabel.text = "x"
+              numberLabel.font = numberLabel.font.withSize(25)
+          } else {
+              numberLabel.text = ""
+              numberLabel.font = self.configurations.numberLabelFont
+          }
+      } else { // multiple image selections
+          numberLabel.text = sender.assets.isEmpty ? "" : String(sender.assets.count)
+      }
+    
+    
   }
 
   @objc func pickerButtonDidPress(_ button: UIButton) {
